@@ -1,10 +1,10 @@
-/*
+/***
 //// Last Build : date of submission
 //// Compiler   : VS2022
 //// Programmer : Chong Min Kee
 //// Capability : Implementing a variable size record.
 //// Function   : add, search, delete, modify, display records
-*/
+***/
 
 
 /////////////     Includes    /////////////
@@ -16,7 +16,7 @@
 #include <iostream>
 #include <string>
 #include<regex>
-#include <iostream>
+#include<stdio.h>
 using namespace std;
 
 
@@ -24,7 +24,7 @@ using namespace std;
 int RegistrationID = 1000;
 int searCustomerID;
 
-struct Customer_Record // Customer record; is the structName
+struct Passenger_Record // Passenger record; is the structName
 {
 	//define all variables after this line
 	//30th january 2024
@@ -58,11 +58,11 @@ struct Customer_Record // Customer record; is the structName
 
 /////////////     Variable Declarations & Constants /////////////
 
-#define CUSTOMER_FILE_NAME "Customers.txt" // name of the database file to store Customers informations
+#define PASSENGER_FILE_NAME "Passenger.txt" // name of the database file to store Passenger informations
 
-Customer_Record Customer; //variable declaration of Customer
+Passenger_Record Passenger; //variable declaration of Passenger
 char     choice; // for choice in menu
-fstream* fs = NULL, * fs1 = NULL;// file streams for files : fs -> 'Customer', fs1 -> 'temp'
+fstream* fs = NULL, * fs1 = NULL;// file streams for files : fs -> 'Passenger', fs1 -> 'temp'
 bool     deletion = false; // if any record has been deleted
 
 
@@ -73,21 +73,30 @@ bool isFileExist(const char*); // check if a file exists
 
 // Function prototypes
 bool isValidEmail(const string& email);
+bool isValidNumber(const string& number);
 //...
 
 //Function to validate email address
 bool isValidEmail(const string& email)
 {
-	//Regular expression to validate email address
+	//!Regular expression to validate email address
 	const regex pattern(R"(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))");
 	return regex_match(email, pattern);
+}
+
+//Function to validate number
+bool isValidNumber(const string& number)
+{
+	//! Regular expression to validate phone number
+	const regex pattern(R"(\d{10})");
+	return regex_match(number, pattern);
 }
 
 
 /////////////     Main    /////////////
 int main()
 {
-    system("color 1");
+	system("color 1");
 	ifstream input;
 	input.open("id.txt"), ios::in;
 	input >> RegistrationID;
@@ -98,15 +107,19 @@ int main()
 		do ////// Menu //////
 		{
 			system("cls"); // clear screen
-			mainmenu:
-			cout << "\n    < Customers Database > \n\n";
-			cout << "(1) Add     a new Record \n";
-			cout << "(2) Search an existing Record\n";
-			cout << "(3) Update an existing Record\n";
-			cout << "(4) Delete an existing Record \n";
-			cout << "(5) Display Records \n";
-			cout << "(6) Exit \n\n";
-			cout << " Enter a choice (1-5) : " << flush;
+		mainmenu:
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n\n" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t\t             Main Menu              " << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\t\t\t\t\t\t< Passenger Database > \n\n";
+			cout << "\t\t\t\t           (1) Add     a new Record \n";
+			cout << "\t\t\t\t           (2) Search an existing Record\n";
+			cout << "\t\t\t\t           (3) Update an existing Record\n";
+			cout << "\t\t\t\t           (4) Delete an existing Record \n";
+			cout << "\t\t\t\t           (5) Display Records \n";
+			cout << "\t\t\t\t           (6) Exit \n\n";
+			cout << "\t\t\t\t           Enter a choice (1-6) : " << flush;
 			choice = _getch();
 		} while (choice < '1' || choice > '6'); // while we have no good(between 1 and 5), show menu again
 
@@ -115,9 +128,9 @@ int main()
 		// to modify, delete or display records, database file should exist, then we have some records           
 		if (choice == '2' || choice == '3' || choice == '4' || choice == '5')
 		{
-			if (!isFileExist(CUSTOMER_FILE_NAME)) // if database file doesn't exist
+			if (!isFileExist(PASSENGER_FILE_NAME)) // if database file doesn't exist
 			{
-				cout << "\n Database file ('" << CUSTOMER_FILE_NAME << "') doesn't exist, then there are no records." << endl;
+				cout << "\n\t\t\t\t\tDatabase file ('" << PASSENGER_FILE_NAME << "') doesn't exist, then there are no records." << endl;
 				system("pause");
 				continue; // show the menu again
 			}
@@ -126,249 +139,292 @@ int main()
 		switch (choice)
 		{
 			long long int recs_num; // number of records before the record for modifying(deletion)
-			int CustomerRegistrationID;
+			int PassengerRegistrationID;
 
 		case '1': ////// Add Record //////
 
-			cout << "\n\t\t < Entering a new record > ";
-			cout << "\n   Enter the following informations for the new record : ";
-			Customer.RegistrationID = ++RegistrationID;
-			cout << "\nRegistrationID    :" << Customer.RegistrationID << endl;
+			system("cls");
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n" << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n\t\t\t\t|" << "           #New Passenger Registration#" << "           |" << endl;
+			cout << "\t\t\t\t|" << "           #For Flight Ticket Registration#" << "      |" << endl;
+			cout << "\t\t\t\t|" << "           #Add Record#" << "                          |" << endl;
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n";
+			cout << "\n";
+
+			cout << "\t\t\t\t\t\t< Entering a new record > ";
+			cout << "\n\t\t\t\tEnter the following informations for the new record : ";
+			Passenger.RegistrationID = ++RegistrationID;
+			cout << "\n\t\t\t\t\tRegistrationID    :" << Passenger.RegistrationID << endl;
 			if (output.open("id.txt"), ios::out)
 			{
 				output << RegistrationID;
 			}
 			else
-				cout << "the file is empty.";
+				cout << "\t\t\t\t\tthe file is empty.";
 			output.close();
 			cout << endl;
 
-			cout << "1) Name:";
-			getline(cin, Customer.Name);//getline only for string data type
-			while (Customer.Name.find_first_of("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM") == string::npos)
+			cout << "\t\t\t\t\t1) Name:";
+			getline(cin, Passenger.Name);//getline only for string data type
+			while (Passenger.Name.find_first_of("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM") == string::npos)
 			{
-				cout << "\nInvalid Input!Please Enter In A Valid Name!" << endl;
-				cout << "Name :";
-				getline(cin, Customer.Name);
+				cout << "\n\t\t\t\tInvalid Input!Please Enter In A Valid Name!" << endl;
+				cout << "\t\t\t\t\tName :";
+				getline(cin, Passenger.Name);
 			}
 
-			cout << "---------------------------------------------------------------------" << endl;
+			cout << "\t\t\t---------------------------------------------------------------------" << endl;
 
-			cout << "2) Nationality:"<<"\n";
-			cout << "(1)Malaysian" << endl;
-			cout << "(2)Non-Malaysian" << endl;
-			cout << "Enter A Choice(1/2):";
-			cin >> Customer.Nationality;
+			cout << "\t\t\t\t\t2) Nationality:" << "\n";
+			cout << "\t\t\t\t\t(1)Malaysian" << endl;
+			cout << "\t\t\t\t\t(2)Non-Malaysian" << endl;
+			cout << "\t\t\t\t\tEnter A Choice(1/2):";
+			cin >> Passenger.Nationality;
 
-			while ((Customer.Nationality != "1") && (Customer.Nationality != "2"))
+			while ((Passenger.Nationality != "1") && (Passenger.Nationality != "2"))
 			{
-				cout << "Invalid!Please Enter Again!" << endl;
-				cout << "Enter A Choice(1/2):";
-				cin >> Customer.Nationality;
+				cout << "\n\t\t\t\t\tInvalid!Please Enter Again!" << endl;
+				cout << "\t\t\t\t\tEnter A Choice(1/2):";
+				cin >> Passenger.Nationality;
 			}
 
-			if (Customer.Nationality == "1")
+			if (Passenger.Nationality == "1")
 			{
-				Customer.Nationality = "Malaysian";
-				cout << "Nationality:" << Customer.Nationality << endl;
-				cout << "ICNumber" << "(Ex.000000-00-0000):";
-				cin >> Customer.ICNumber;
+				Passenger.Nationality = "Malaysian";
+				cout << "\n\t\t\t\t\tNationality:" << Passenger.Nationality << endl;
+				cout << "\t\t\t\t\tICNumber" << "(Ex.000000-00-0000):";
+				cin >> Passenger.ICNumber;
 
-				if (Customer.ICNumber[11] % 2 == 0)//Even number
-					cout << "Gender: Female";
+				if (Passenger.ICNumber[11] % 2 == 0)//Even number
+					cout << "\t\t\t\t\tGender : Female";
 				else//Odd number
-					cout << "Gender: Male";
+					cout << "\t\t\t\t\tGender : Male";
 				cout << endl;
 
-				Customer.BirthDate = Customer.ICNumber.substr(4, 2) + "/" + Customer.ICNumber.substr(2, 2) + "/" + Customer.ICNumber.substr(0, 2);
+				Passenger.BirthDate = Passenger.ICNumber.substr(4, 2) + "/" + Passenger.ICNumber.substr(2, 2) + "/" + Passenger.ICNumber.substr(0, 2);
 
-				cout << "BirthDate :" << Customer.BirthDate << endl;
+				cout << "\t\t\t\t\tBirthDate :" << Passenger.BirthDate << endl;
 			}
 
-			else if (Customer.Nationality == "2")
+			else if (Passenger.Nationality == "2")
 			{
-				Customer.Nationality = "Non-Malaysian";
-				cout << "Nationality:" << Customer.Nationality << endl;
-				cout << "Passport Number" << "(Ex.A123456):";
-				cin >> Customer.PassportNumber;
+				Passenger.Nationality = "Non-Malaysian";
+				cout << "\n\t\t\t\t\tNationality:" << Passenger.Nationality << endl;
+				cout << "\t\t\t\t\tPassport Number :" << "(Ex.A123456):" ;
+				cin >> Passenger.PassportNumber;
 
-				while ((Customer.PassportNumber.size() != 10) || (Customer.PassportNumber.find_first_of("1234567890") == string::npos))
+				while ((Passenger.PassportNumber.size() != 10) || (Passenger.PassportNumber.find_first_of("1234567890") == string::npos))
 				{
-					cout << "\nInvalid Input!Please Enter In A Valid Passport Number!" << endl;
-					cout << "Passport Number :";
-					cin >> Customer.PassportNumber;
+					cout << "\n\t\t\t\tInvalid Input!Please Enter In A Valid Passport Number!" << endl;
+					cout << "\t\t\t\t\tPassport Number :";
+					cin >> Passenger.PassportNumber;
 
 				}
-				cout << "Expiry Date :";
-				cin >> Customer.ExpiryDate;
-				cout << "Age :";
-				cin >> Customer.Age;
-				cout << "Gender :";
-				cin >> Customer.Gender;
+				cout << "\t\t\t\t\tExpiry Date :";
+				cin >> Passenger.ExpiryDate;
+				cout << "\t\t\t\t\tAge :";
+				cin >> Passenger.Age;
+				cout << "\t\t\t\t\tGender :";
+				cin >> Passenger.Gender;
 				cout << endl;
 			}
 
-			cout << "---------------------------------------------------------------------" << endl;
+			cout << "\t\t\t---------------------------------------------------------------------" << endl;
 
-			cout << "3)Email Address:";
-			cin >> Customer.EmailAddress;
-			while (!isValidEmail(Customer.EmailAddress))
+			cout << "\t\t\t\t\t3)Email Address :" << "(Ex.ali123456@gmail.com) :";
+			cin >> Passenger.EmailAddress;
+			while (!isValidEmail(Passenger.EmailAddress))
 			{
-				cout << "Invalid Email Address!Please Enter A Valid Email Address:";
-				cin >> Customer.EmailAddress;
+				cout << "\t\t\t\t\tInvalid Email Address!Please Enter A Valid Email Address :";
+				cin >> Passenger.EmailAddress;
 			}
 
 			cout << "---------------------------------------------------------------------" << endl;
 
-			cout << "4) Phone Number:";
-			cin >> Customer.PhoneNumber;
-			while ((Customer.PhoneNumber.size() != 10) || (Customer.PhoneNumber.find_first_of("0123456789") == string::npos))
+			cout << "\t\t\t\t\t4) Phone Number :" << "(Ex.0112223333):";
+			cin >> Passenger.PhoneNumber;
+			while (!isValidNumber(Passenger.PhoneNumber))
 			{
-				cout << "\nInvalid Input!Please Enter In A Valid Phone Number!" << endl;
-				cout << "Phone Number:";
-				cin >> Customer.PhoneNumber;
-
+				cout << "\n\t\t\t\t\tInvalid Input!Please Enter In A Valid Phone Number!" << endl;
+				cout << "\t\t\t\t\tPhone Number :";
+				cin >> Passenger.PhoneNumber;
 			}
-			cout << "---------------------------------------------------------------------" << endl;
+			cout << "\t\t\t---------------------------------------------------------------------" << endl;
 
-			cout << "5)Journey:" << endl;
-			cout << "(1)One Way" << endl;
-			cout << "(2)Round Trip" << endl;
-			cout << "Enter A Choice(1/2):";
-			cin >> Customer.Journey;
+			cout << "\t\t\t\t\t5)Journey:" << endl;
+			cout << "\t\t\t\t\t(1)One Way" << endl;
+			cout << "\t\t\t\t\t(2)Round Trip" << endl;
+			cout << "\t\t\t\t\tEnter A Choice(1/2) :";
+			cin >> Passenger.Journey;
 
-			while ((Customer.Journey != "1") && (Customer.Journey != "2"))
+			while ((Passenger.Journey != "1") && (Passenger.Journey != "2"))
 			{
-				cout << "Invalid!Please enter again!" << endl;
-				cout << "Enter A Choice(1/2):";
-				cin >> Customer.Journey;
-			}
-
-			if (Customer.Journey == "1")
-			{
-				Customer.Journey = "One Way";
-				cout << "Journey:" << Customer.Journey << endl;
-				cout << "DateOfBooking(DD-MM-YYYY)" << endl;
-				cout << "Enter Your Flight Date" << endl;
-				cout << "Day:";
-				cin >> Customer.Day;
-				cout << "Month";
-				cin >> Customer.Month;
-				cout << "Year";
-				cin >> Customer.Year;
-
-				cout << "DateOfBooking:" << Customer.Day << "/" << Customer.Month << "/" << Customer.Year << endl;
+				cout << "\t\t\t\t\tInvalid!Please enter again!" << endl;
+				cout << "\t\t\t\t\tEnter A Choice(1/2) :";
+				cin >> Passenger.Journey;
 			}
 
-			if (Customer.Journey == "2")
+			if (Passenger.Journey == "1")
 			{
-				Customer.Journey = "Round Trip";
-				cout << "Journey:" << Customer.Journey << endl;
-				cout << "DateOfFirstFlightBooking(DD-MM-YYYY)" << endl;
-				cout << "Enter Your First Flight Date" << endl;
-				cout << "Day:";
-				cin >> Customer.FirstFlightDay;
-				cout << "Month";
-				cin >> Customer.FirstFlightMonth;
-				cout << "Year";
-				cin >> Customer.FirstFlightYear;
+				Passenger.Journey = "One Way";
+				cout << "\t\t\t\t\tJourney :" << Passenger.Journey << endl;
+				cout << "\t\t\t\t\tDateOfBooking(DD-MM-YYYY)" << endl;
+				cout << "\t\t\t\t\tEnter Your Flight Date" << endl;
+				cout << "\t\t\t\t\tDay :";
+				cin >> Passenger.Day;
+				cout << "\t\t\t\t\tMonth :";
+				cin >> Passenger.Month;
+				cout << "\t\t\t\t\tYear :";
+				cin >> Passenger.Year;
 
-				cout << "DateOfSecondFlightBooking(DD-MM-YYYY)" << endl;
-				cout << "Enter Your Second Flight Date" << endl;
-				cout << "Day:";
-				cin >> Customer.SecondFlightDay;
-				cout << "Month";
-				cin >> Customer.SecondFlightMonth;
-				cout << "Year";
-				cin >> Customer.SecondFlightYear;
-
-				cout << "FirstFlight:" << Customer.FirstFlightDay << "/" << Customer.FirstFlightMonth << "/" << Customer.FirstFlightYear << endl;
-				cout << "SecondFlight:" << Customer.SecondFlightDay << "/" << Customer.SecondFlightMonth << "/" << Customer.SecondFlightYear << endl;
+				cout << "\t\t\t\t\tDateOfBooking:" << Passenger.Day << "/" << Passenger.Month << "/" << Passenger.Year << endl;
 			}
 
-			cout << "---------------------------------------------------------------------" << endl;
+			if (Passenger.Journey == "2")
+			{
+				Passenger.Journey = "\t\t\t\t\tRound Trip";
+				cout << "\t\t\t\t\tJourney:" << Passenger.Journey << endl;
+				cout << "\t\t\t\t\tDateOfFirstFlightBooking(DD-MM-YYYY)" << endl;
+				cout << "\t\t\t\t\tEnter Your First Flight Date" << endl;
+				cout << "\t\t\t\t\tDay :";
+				cin >> Passenger.FirstFlightDay;
+				cout << "\t\t\t\t\tMonth :";
+				cin >> Passenger.FirstFlightMonth;
+				cout << "\t\t\t\t\tYear :";
+				cin >> Passenger.FirstFlightYear;
 
-			cout << "6)Seat:" << endl;
-			cout << "(1)First Class" << endl;
-			cout << "(2)Business Class" << endl;
-			cout << "(3)Economy Class" << endl;
-			cout << "Enter A Chioce:";
-			cin >> Customer.Seat;
+				cout << "\t\t\t\t\tDateOfSecondFlightBooking(DD - MM - YYYY)" << endl;
+				cout << "\t\t\t\t\tEnter Your Second Flight Date" << endl;
+				cout << "\t\t\t\t\tDay :";
+				cin >> Passenger.SecondFlightDay;
+				cout << "\t\t\t\t\tMonth :";
+				cin >> Passenger.SecondFlightMonth;
+				cout << "\t\t\t\t\tYear :";
+				cin >> Passenger.SecondFlightYear;
 
-			while ((Customer.Seat != "1") && (Customer.Seat != "2") && (Customer.Seat != "3"))
-			{
-				cout << "Invalid!Please enter again!" << endl;
-				cout << "Enter A Choice(1/2/3):";
-				cin >> Customer.Seat;
+				cout << "\t\t\t\t\tFirstFlight:" << Passenger.FirstFlightDay << "/" << Passenger.FirstFlightMonth << "/" << Passenger.FirstFlightYear << endl;
+				cout << "\t\t\t\t\tSecondFlight:" << Passenger.SecondFlightDay << "/" << Passenger.SecondFlightMonth << "/" << Passenger.SecondFlightYear << endl;
 			}
-			if (Customer.Seat == "1")
+
+			cout << "\t\t\t---------------------------------------------------------------------" << endl;
+
+			cout << "\t\t\t\t\t6)Seat:" << endl;
+			cout << "\t\t\t\t\t(1)First Class" << endl;
+			cout << "\t\t\t\t\t(2)Business Class" << endl;
+			cout << "\t\t\t\t\t(3)Economy Class" << endl;
+			cout << "\t\t\t\t\tEnter A Chioce :";
+			cin >> Passenger.Seat;
+
+			while ((Passenger.Seat != "1") && (Passenger.Seat != "2") && (Passenger.Seat != "3"))
 			{
-				Customer.Seat = "First Class";
-				cout << "Seat:" << Customer.Seat << endl;
+				cout << "\t\t\t\t\tInvalid!Please enter again!" << endl;
+				cout << "\t\t\t\t\tEnter A Choice(1/2/3) :";
+				cin >> Passenger.Seat;
 			}
-			if (Customer.Seat == "2")
+			if (Passenger.Seat == "1")
 			{
-				Customer.Seat = "Business Class";
-				cout << "Seat:" << Customer.Seat << endl;
+				Passenger.Seat = "First Class";
+				cout << "\t\t\t\t\tSeat :" << Passenger.Seat << endl;
 			}
-			if (Customer.Seat == "3")
+			if (Passenger.Seat == "2")
 			{
-				Customer.Seat = "Economy Class";
-				cout << "TypeOfSeat:" << Customer.Seat << endl;
+				Passenger.Seat = "Business Class";
+				cout << "\t\t\t\t\tSeat :" << Passenger.Seat << endl;
+			}
+			if (Passenger.Seat == "3")
+			{
+				Passenger.Seat = "Economy Class";
+				cout << "\t\t\t\t\tTypeOfSeat :" << Passenger.Seat << endl;
 			}
 
 
 			//Don't touch after this line
-			Customer.deleted = 0;
+			Passenger.deleted = 0;
 
-			fs = new fstream(CUSTOMER_FILE_NAME, ios::out | ios::app | ios::binary);
+			fs = new fstream(PASSENGER_FILE_NAME, ios::out | ios::app | ios::binary);
 
 			if (!fs)
 			{
-				cout << "\n Can't open or create '" << CUSTOMER_FILE_NAME << "' file" << endl;
+				cout << "\n Can't open or create '" << PASSENGER_FILE_NAME << "' file" << endl;
 				system("pause");
 				break;
 			}
 
-			fs->write((char*)&Customer, sizeof(Customer));
+			cout << "\n\t\t\t\tDo you want to save this record?(1=Yes 2=No 3=Save and Add):";
+			char comfirm;
+		loopadd:
+			cin >> comfirm;
+			cin.ignore();
+			system("cls");
 
-			closeFile(fs);
+			if (comfirm == '1')
+			{
+				fs->write((char*)&Passenger, sizeof(Passenger));
+				closeFile(fs);
+				goto mainmenu;
+				break;
 
-			cout << "\n Record added." << endl;
-			system("pause");
+			}
+			if (comfirm == '2')
+			{
+				cout << "\n\t\t\t\t\tRecord not added." << endl;
+				system("pause");
+				goto mainmenu;
+				break;
+			}
+			if (comfirm == '3')
+			{
+				fs->write((char*)&Passenger, sizeof(Passenger));
+				closeFile(fs);
+				goto loopadd;
+				break;
 
-			break;
-
+			}
+			else
+			{
+				cout << "\n\n\t\t\t\tInvalid Input!Please enter(1=Yes,2=No,3=Save and Add)To Comfirm Add Record.";
+				cout << "\n\t\t\t\tDo you want to add this record?(1=Yes,2=No,3=Save and Add):";
+				goto loopadd;
+			}
+			
 		case '2': ////// Search Record //////
 
+			system("color 2");
 			system("cls");
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n" << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n\t\t\t\t|" << "           #New Passenger Registration#" << "           |" << endl;
+			cout << "\t\t\t\t|" << "           #For Flight Ticket Registration#" << "      |" << endl;
+			cout << "\t\t\t\t|" << "           #Search Record#" << "                       |" << endl;
+			cout << "\t\t\t\t---------------------------------------------------";
 			cout << "\n";
 			cout << "\n";
-			cout << "\t#New Customer Registration#" << endl;
-			cout << "\t#For Flight Ticket Registration#" << endl;
-			cout << "\t#Search Record#" << endl;
-
-			cout << "\n";
-			cout << "\n";
-			cout << "\nEnter Customer ID that you search:";
+			
+			cout << "\n\t\t\t\t\tEnter Passenger ID that you search:";
 			cin >> searCustomerID;
 			cin.ignore();
 
-			fs = new fstream(CUSTOMER_FILE_NAME, ios::in | ios::binary);
+			fs = new fstream(PASSENGER_FILE_NAME, ios::in | ios::binary);
 
 			if (!fs)
 			{
-				cout << "\n Can't open or create" << CUSTOMER_FILE_NAME << "' file" << endl;
+				cout << "\n\t\t\t\t\tCan't open or create" << PASSENGER_FILE_NAME << "' file" << endl;
 				system("pause");
 				break;
 			}
 
 			recs_num = -1;
-			while (fs->read((char*)&Customer, sizeof(Customer)))
+			while (fs->read((char*)&Passenger, sizeof(Passenger)))
 			{
 				recs_num++;
 
-				if (searCustomerID == Customer.RegistrationID && !Customer.deleted)/*if user deleted an customer then added another
+				if (searCustomerID == Passenger.RegistrationID && !Passenger.deleted)/*if user deleted an customer then added another
 				one with the same ID in the same instance of program runs, deleted customer is still there, then we should go
 				through all the file*/
 					break;
@@ -376,87 +432,97 @@ int main()
 
 			if (fs->eof())//if(the record is not in the file || it's there but it's deleted
 			{
-				cout << "\nYour specified Customer doesn't exist in file." << endl;
+				cout << "\n\t\t\t\tYour specified Passenger doesn't exist in file." << endl;
 				closeFile(fs);
 				system("pause");
 				goto mainmenu;
 				break;
 			}
 
-			fs->seekp(sizeof(Customer) * recs_num, ios::beg);//go to the searched
+			fs->seekp(sizeof(Passenger) * recs_num, ios::beg);//go to the searched
 
-			fs->read((char*)&Customer, sizeof(Customer));//display the searched record
+			fs->read((char*)&Passenger, sizeof(Passenger));//display the searched record
 
-			if (!Customer.deleted)
+			if (!Passenger.deleted)
 			{
 				cout << "\n";
-				cout << "Registration ID :" << Customer.RegistrationID << "\n";
-				cout << "Name :" << Customer.Name << "\n";
-				if (Customer.Nationality == "1")
+				cout << "\t\t\t\t\tRegistration ID :" << Passenger.RegistrationID << "\n";
+				cout << "\t\t\t\t\tName :" << Passenger.Name << "\n";
+				if (Passenger.Nationality == "1")
 				{
-					cout << "Nationality :" << Customer.Nationality << endl;
-					cout << "ICNumber" << "(Ex.000000-00-0000)" << Customer.ICNumber;
+					cout << "\t\t\t\t\tNationality :" << Passenger.Nationality << endl;
+					cout << "\t\t\t\t\tICNumber" << "(Ex.000000-00-0000)" << Passenger.ICNumber;
 
-					if (Customer.ICNumber[11] % 2 == 0)//Even number
-						cout << "Gender: Female";
+					if (Passenger.ICNumber[11] % 2 == 0)//Even number
+						cout << "\t\t\t\t\tGender: Female";
 					else//Odd number
-						cout << "Gender: Male";
+						cout << "\t\t\t\t\tGender: Male";
 					cout << endl;
 
-					Customer.BirthDate = Customer.ICNumber.substr(4, 2) + "/" + Customer.ICNumber.substr(2, 2) + "/" + Customer.ICNumber.substr(0, 2);
+					Passenger.BirthDate = Passenger.ICNumber.substr(4, 2) + "/" + Passenger.ICNumber.substr(2, 2) + "/" + Passenger.ICNumber.substr(0, 2);
 
-					cout << "BirthDate :" << Customer.BirthDate << endl;
+					cout << "\t\t\t\t\tBirthDate :" << Passenger.BirthDate << endl;
 				}
 
-				else if (Customer.Nationality == "2")
+				else if (Passenger.Nationality == "2")
 				{
-					Customer.Nationality = "Non-Malaysian";
-					cout << "Nationality :" << Customer.Nationality << endl;
-					cout << "Passport Number" << "(Ex.A123456):" << Customer.PassportNumber;
-					cout << "Expiry Date :" << Customer.ExpiryDate << "\n";
-					cout << "Age :" << Customer.Age << "\n";
-					cout << "Gender" << Customer.Gender << "\n";
+					Passenger.Nationality = "Non-Malaysian";
+					cout << "\t\t\t\t\tNationality :" << Passenger.Nationality << endl;
+					cout << "\t\t\t\t\tPassport Number" << "(Ex.A123456):" << Passenger.PassportNumber;
+					cout << "\t\t\t\t\tExpiry Date :" << Passenger.ExpiryDate << "\n";
+					cout << "\t\t\t\t\tAge :" << Passenger.Age << "\n";
+					cout << "\t\t\t\t\tGender" << Passenger.Gender << "\n";
 				}
 
-				cout << "Email Address :" << Customer.EmailAddress << "\n";
-				cout << "Phone Number :" << Customer.PhoneNumber << "\n";
+				cout << "\t\t\t\t\tEmail Address :" << Passenger.EmailAddress << "\n";
+				cout << "\t\t\t\t\tPhone Number :" << Passenger.PhoneNumber << "\n";
 
-				if (Customer.Journey == "1")
+				if (Passenger.Journey == "1")
 				{
-					cout << "DateOfBooking:" << Customer.Day << "/" << Customer.Month << "/" << Customer.Year << endl;
+					cout << "\t\t\t\t\tDateOfBooking :" << Passenger.Day << "/" << Passenger.Month << "/" << Passenger.Year << endl;
 				}
 
-				else if (Customer.Journey == "2")
+				else if (Passenger.Journey == "2")
 				{
-					cout << "Date Of First Flight Booking:" << "\n" << Customer.FirstFlightDay << "/" << Customer.FirstFlightMonth << "/" << Customer.FirstFlightYear << endl;
-					cout << "Date Of Second Flight Booking:" << "\n" << Customer.SecondFlightDay << "/" << Customer.SecondFlightMonth << "/" << Customer.SecondFlightYear << endl;
+					cout << "\t\t\t\t\tDate Of First Flight Booking :" << "\n" << Passenger.FirstFlightDay << "/" << Passenger.FirstFlightMonth << "/" << Passenger.FirstFlightYear << endl;
+					cout << "\t\t\t\t\tDate Of Second Flight Booking :" << "\n" << Passenger.SecondFlightDay << "/" << Passenger.SecondFlightMonth << "/" << Passenger.SecondFlightYear << endl;
 				}
 
-				cout << "TypeOfSeat:" << Customer.Seat << "\n";
+				cout << "\t\t\t\t\tTypeOfSeat :" << Passenger.Seat << "\n";
 			}
 
-			cout << "\n To return to menu";
-				system("pause");
-				closeFile(fs);
+			cout << "\n\t\t\t\t\tTo return to menu";
+			system("pause");
+			closeFile(fs);
 			goto mainmenu;
 			break;
 
 
 
-		case '3': ////// Modify Record //////
+		case '3': ////// Update Record //////
 
+			system("color 5");
 			system("cls");
-			cout << "\t#New Customer  Registration#" << endl;
-			cout << "\t#For Flight Ticket Registration#" << endl;
-			cout << "\t#Modify Record#" << endl;
-			cout << "\n Enter Customer ID, that you want modify its information : ";
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n" << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n\t\t\t\t|" << "           #New Passenger Registration#" << "           |" << endl;
+			cout << "\t\t\t\t|" << "           #For Flight Ticket Registration#" << "      |" << endl;
+			cout << "\t\t\t\t|" << "           #Update Record#" << "                       |" << endl;
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n";
+			cout << "\n";
+		
+			cout << "\n\t\t\t\tEnter Passenger ID, that you want modify its information : ";
 			cin >> searCustomerID;
+			cin.ignore();
 
-			fs = new fstream(CUSTOMER_FILE_NAME, ios::in | ios::out | ios::binary);
+			fs = new fstream(PASSENGER_FILE_NAME, ios::in | ios::out | ios::binary);
 
 			if (!fs)
 			{
-				cout << "\n Can't open or create '" << CUSTOMER_FILE_NAME << "' file" << endl;
+				cout << "\n\t\t\t\t\tCan't open or create '" << PASSENGER_FILE_NAME << "' file" << endl;
 				system("pause");
 
 				break;
@@ -464,18 +530,18 @@ int main()
 
 			recs_num = -1;
 
-			while (fs->read((char*)&Customer, sizeof(Customer)))
+			while (fs->read((char*)&Passenger, sizeof(Passenger)))
 			{
 				recs_num++;
 
-				if (searCustomerID == Customer.RegistrationID && !Customer.deleted)/*if user deleted an customer then added another  one with the same ID in the same instance of program runs,
+				if (searCustomerID == Passenger.RegistrationID && !Passenger.deleted)/*if user deleted an customer then added another  one with the same ID in the same instance of program runs,
 		delected customer is still here, then we should go thbrough all this file*/
 					break;
 			}
 
 			if (fs->eof()) // if (the record is not in the file || it's there but it's deleted)
 			{
-				cout << "\n Your specified Customer doesn't exist in file." << endl;
+				cout << "\n\t\t\t\tYour specified Passenger doesn't exist in file." << endl;
 				closeFile(fs);
 				system("pause");
 				goto mainmenu;
@@ -483,47 +549,47 @@ int main()
 			}
 		UpdateList:
 
-			cout << "Select specific record to update:\n";
-			cout << "1.Name :" << Customer.Name << "\n";
+			cout << "\t\t\t\t\tSelect specific record to update:\n";
+			cout << "\t\t\t\t\t1.Name :" << Passenger.Name << "\n";
 
-			if (Customer.Nationality == "1")
+			if (Passenger.Nationality == "1")
 			{
-				cout << "2.Nationality :Malaysian" << "\n";
-				cout << "3.IC Number :" << Customer.ICNumber << "\n";//IC Number will detect the Gender and birthdate
+				cout << "\t\t\t\t\t2.Nationality :Malaysian" << "\n";
+				cout << "\t\t\t\t\t3.IC Number :" << Passenger.ICNumber << "\n";//IC Number will detect the Gender and birthdate
 
 			}
 			else
 			{
-				cout << "2.Nationality :Non-malaysian" << "\n";
-				cout << "4.Passport Number :" << Customer.PassportNumber << "\n";
-				cout << "5.Expiry Date:" << Customer.ExpiryDate << "\n";
-				cout << "6.Age :" << Customer.Age << "\n";
-				cout << "7.Gender :" << Customer.Gender << "\n";
+				cout << "\t\t\t\t\t2.Nationality :Non-malaysian" << "\n";
+				cout << "\t\t\t\t\t3.Passport Number :" << Passenger.PassportNumber << "\n";
+				cout << "\t\t\t\t\t4.Expiry Date:" << Passenger.ExpiryDate << "\n";
+				cout << "\t\t\t\t\t5.Age :" << Passenger.Age << "\n";
+				cout << "\t\t\t\t\t6.Gender :" << Passenger.Gender << "\n";
 			}
 
-			cout << "7.Email Address :" << Customer.EmailAddress << "\n";
-			cout << "8.Phone Number " << Customer.PhoneNumber << "\n";
-			cout << "9.Journey" << Customer.Journey << "\n";
+			cout << "\t\t\t\t\t7.Email Address :" << Passenger.EmailAddress << "\n";
+			cout << "\t\t\t\t\t8.Phone Number :" << Passenger.PhoneNumber << "\n";
+			cout << "\t\t\t\t\t9.Journey :" << Passenger.Journey << "\n";
 
-			if (Customer.Journey == "1")
+			if (Passenger.Journey == "1")
 			{
-				cout << "10.DateOfBooking:" << Customer.Day << "/" << Customer.Month << "/" << Customer.Year << endl;
+				cout << "\t\t\t\t\t10.DateOfBooking :" << Passenger.Day << "/" << Passenger.Month << "/" << Passenger.Year << endl;
 			}
 
-			else if (Customer.Journey == "2")
+			else if (Passenger.Journey == "2")
 			{
-				cout << "11.Date Of First Flight Booking:" << "\n" << Customer.FirstFlightDay << "/" << Customer.FirstFlightMonth << "/" << Customer.FirstFlightYear << endl;
-				cout << "12.Date Of Second Flight Booking:" << "\n" << Customer.SecondFlightDay << "/" << Customer.SecondFlightMonth << "/" << Customer.SecondFlightYear << endl;
+				cout << "\t\t\t\t\t11.Date Of First Flight Booking :" << "\n" << Passenger.FirstFlightDay << "/" << Passenger.FirstFlightMonth << "/" << Passenger.FirstFlightYear << endl;
+				cout << "\t\t\t\t\t12.Date Of Second Flight Booking :" << "\n" << Passenger.SecondFlightDay << "/" << Passenger.SecondFlightMonth << "/" << Passenger.SecondFlightYear << endl;
 			}
 
-			cout << "11.Type Of Seat :" << Customer.Seat << "\n";
+			cout << "\t\t\t\t\t1.Type Of Seat :" << Passenger.Seat << "\n";
 
-			fs->seekp(sizeof(Customer) * recs_num, ios::beg); // go to the first of the record to be modified
-			fs->write((char*)&Customer, sizeof(Customer));
+			fs->seekp(sizeof(Passenger) * recs_num, ios::beg); // go to the first of the record to be modified
+			fs->write((char*)&Passenger, sizeof(Passenger));
 
 			closeFile(fs);
 
-			cout << "\n Record is modified." << endl;
+			cout << "\n\t\t\t\t\tRecord is modified." << endl;
 			system("pause");
 			closeFile(fs);
 			goto mainmenu;
@@ -532,50 +598,59 @@ int main()
 
 		case '4': ////// Delete Record //////
 
-			cout << "\t#New Customer  Registration#" << endl;
-			cout << "\t#For Booking Flight Ticket Registration#" << endl;
-			cout << "\t#Delete Record#" << endl;
-
-			cout << "\n Enter Customer ID that you want to delete for its information : ";
+			system("color 6");
+			system("cls");
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n" << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n\t\t\t\t|" << "           #New Passenger Registration#" << "           |" << endl;
+			cout << "\t\t\t\t|" << "           #For Flight Ticket Registration#" << "      |" << endl;
+			cout << "\t\t\t\t|" << "           #Delete Record#" << "                       |" << endl;
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n";
+			cout << "\n";
+		
+			cout << "\n\t\t\t\tEnter Passenger ID that you want to delete for its information : ";
 			cin >> searCustomerID;
 			cin.ignore();
 
-			fs = new fstream(CUSTOMER_FILE_NAME, ios::in | ios::out | ios::binary);
+			fs = new fstream(PASSENGER_FILE_NAME, ios::in | ios::out | ios::binary);
 
 			if (!fs)
 			{
-				cout << "\n Can't open or create '" << CUSTOMER_FILE_NAME << "' file." << endl;
+				cout << "\n\t\t\t\t\tCan't open or create '" << PASSENGER_FILE_NAME << "' file." << endl;
 				system("pause");
 				break;
 			}
 
 			recs_num = -1;
 
-			while (fs->read((char*)&Customer, sizeof(Customer)))
+			while (fs->read((char*)&Passenger, sizeof(Passenger)))
 			{
 				recs_num++;
 
-				if (Customer.RegistrationID == Customer.RegistrationID && !Customer.deleted) // if user deleted an Customer then added another one with the same ID in the same instance of program runs, deleted Customer is still there, then we should go through all the file
+				if (Passenger.RegistrationID == Passenger.RegistrationID && !Passenger.deleted) // if user deleted an Passenger then added another one with the same ID in the same instance of program runs, deleted Passenger is still there, then we should go through all the file
 					break;
 			}
 
 			if (fs->eof()) // if (the record is not in the file || it's there but it's deleted)
 			{
-				cout << "\n Your specified Customer doesn't exist in database file." << endl;
+				cout << "\n\t\t\t\tYour specified Passenger doesn't exist in database file." << endl;
 				closeFile(fs);
 				system("pause");
 				break;
 			}
 
-			Customer.deleted = 1;
+			Passenger.deleted = 1;
 
-			fs->seekp(sizeof(Customer) * recs_num, ios::beg);
-			fs->write((char*)&Customer, sizeof(Customer));
+			fs->seekp(sizeof(Passenger) * recs_num, ios::beg);
+			fs->write((char*)&Passenger, sizeof(Passenger));
 
 			closeFile(fs);
 
 			deletion = true; // we have some deleted records
-			cout << "\n Record is deleted." << endl;
+			cout << "\n\t\t\t\t\tRecord is deleted." << endl;
 
 			system("pause");
 			goto mainmenu;
@@ -584,68 +659,76 @@ int main()
 
 		case '5': // Display Records
 
-			cout << "\t#New Customer  Registration#" << endl;
-			cout << "\t#For Booking Flight Ticket Office#" << endl;
-			cout << "\t#Display Record#" << endl;
-
-
-			fs = new fstream(CUSTOMER_FILE_NAME, ios::in | ios::binary);
+			system("color 7");
+			system("cls");
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n" << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n\t\t\t\t|" << "           #New Passenger Registration#" << "           |" << endl;
+			cout << "\t\t\t\t|" << "           #For Flight Ticket Registration#" << "      |" << endl;
+			cout << "\t\t\t\t|" << "           #Display Record#" << "                      |" << endl;
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n";
+			cout << "\n";
+			
+			fs = new fstream(PASSENGER_FILE_NAME, ios::in | ios::binary);
 
 			if (!fs)
 			{
-				cout << "\n Can't open or create '" << CUSTOMER_FILE_NAME << "' file." << endl;
+				cout << "\n\t\t\t\t\tCan't open or create '" << PASSENGER_FILE_NAME << "' file." << endl;
 				system("pause");
 				break;
 			}
 
-			while (fs->read((char*)&Customer, sizeof(Customer))) // display records
+			while (fs->read((char*)&Passenger, sizeof(Passenger))) // display records
 			{
-				if (!Customer.deleted)
+				if (!Passenger.deleted)
 				{
 					cout << "\n";
-					cout << "Registration ID :" << Customer.RegistrationID << "\n";
-					cout << "Name :" << Customer.Name << "\n";
-					if (Customer.Nationality == "1")
+					cout << "\t\t\t\t\tRegistration ID :" << Passenger.RegistrationID << "\n";
+					cout << "\t\t\t\t\tName :" << Passenger.Name << "\n";
+					if (Passenger.Nationality == "1")
 					{
-						cout << "Nationality :" << Customer.Nationality << endl;
-						cout << "ICNumber" << "(Ex.000000-00-0000)" << Customer.ICNumber;
+						cout << "\t\t\t\t\tNationality :" << Passenger.Nationality << endl;
+						cout << "\t\t\t\t\tICNumber" << "(Ex.000000-00-0000)" << Passenger.ICNumber;
 
-						if (Customer.ICNumber[11] % 2 == 0)//Even number
-							cout << "Gender: Female";
+						if (Passenger.ICNumber[11] % 2 == 0)//Even number
+							cout << "\t\t\t\t\tGender : Female";
 						else//Odd number
-							cout << "Gender: Male";
+							cout << "\t\t\t\t\tGender : Male";
 						cout << endl;
 
-						Customer.BirthDate = Customer.ICNumber.substr(4, 2) + "/" + Customer.ICNumber.substr(2, 2) + "/" + Customer.ICNumber.substr(0, 2);
+						Passenger.BirthDate = Passenger.ICNumber.substr(4, 2) + "/" + Passenger.ICNumber.substr(2, 2) + "/" + Passenger.ICNumber.substr(0, 2);
 
-						cout << "BirthDate :" << Customer.BirthDate << endl;
+						cout << "\t\t\t\t\tBirthDate :" << Passenger.BirthDate << endl;
 					}
 
-					else if (Customer.Nationality == "2")
+					else if (Passenger.Nationality == "2")
 					{
-						Customer.Nationality = "Non-Malaysian";
-						cout << "Nationality :" << Customer.Nationality << endl;
-						cout << "Passport Number" << "(Ex.A123456):" << Customer.PassportNumber;
-						cout << "Expiry Date :" << Customer.ExpiryDate << "\n";
-						cout << "Age :" << Customer.Age << "\n";
-						cout << "Gender" << Customer.Gender << "\n";
+						Passenger.Nationality = "Non-Malaysian";
+						cout << "\t\t\t\t\tNationality :" << Passenger.Nationality << endl;
+						cout << "\t\t\t\t\tPassport Number :" << "(Ex.A123456):" << Passenger.PassportNumber;
+						cout << "\t\t\t\t\tExpiry Date :" << Passenger.ExpiryDate << "\n";
+						cout << "\t\t\t\t\tAge :" << Passenger.Age << "\n";
+						cout << "\t\t\t\t\tGender :" << Passenger.Gender << "\n";
 					}
 
-					cout << "Email Address :" << Customer.EmailAddress << "\n";
-					cout << "Phone Number :" << Customer.PhoneNumber << "\n";
+					cout << "\t\t\t\t\tEmail Address :" << Passenger.EmailAddress << "\n";
+					cout << "\t\t\t\t\tPhone Number :" << Passenger.PhoneNumber << "\n";
 
-					if (Customer.Journey == "1")
+					if (Passenger.Journey == "1")
 					{
-						cout << "DateOfBooking:" << Customer.Day << "/" << Customer.Month << "/" << Customer.Year << endl;
+						cout << "\t\t\t\t\tDateOfBooking :" << Passenger.Day << "/" << Passenger.Month << "/" << Passenger.Year << endl;
 					}
 
-					else if (Customer.Journey == "2")
+					else if (Passenger.Journey == "2")
 					{
-						cout << "Date Of First Flight Booking:" << "\n" << Customer.FirstFlightDay << "/" << Customer.FirstFlightMonth << "/" << Customer.FirstFlightYear << endl;
-						cout << "Date Of Second Flight Booking:" << "\n" << Customer.SecondFlightDay << "/" << Customer.SecondFlightMonth << "/" << Customer.SecondFlightYear << endl;
+						cout << "\t\t\t\t\tDate Of First Flight Booking :" << "\n" << Passenger.FirstFlightDay << "/" << Passenger.FirstFlightMonth << "/" << Passenger.FirstFlightYear << endl;
+						cout << "\t\t\t\t\tDate Of Second Flight Booking :" << "\n" << Passenger.SecondFlightDay << "/" << Passenger.SecondFlightMonth << "/" << Passenger.SecondFlightYear << endl;
 					}
 
-					cout << "TypeOfSeat:" << Customer.Seat << "\n";
+					cout << "\t\t\t\t\tTypeOfSeat :" << Passenger.Seat << "\n";
 
 				}
 
@@ -653,7 +736,7 @@ int main()
 
 			////// Print Flight Ticket records...
 
-			cout << "\n To see menu, ";
+			cout << "\n\t\t\t\t\tTo see menu, ";
 			system("pause");
 			closeFile(fs);
 			goto mainmenu;
@@ -661,14 +744,27 @@ int main()
 
 		case '6': // Exit
 
+			system("color 8");
+			system("cls");
+			cout << "\t\t\t\t\t    Welcome To Malaysia Airlines  \n" << endl;
+			cout << "\t\t\t\t\t____________________________________" << endl;
+			cout << "\n";
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n\t\t\t\t|" << "           #New Passenger Registration#" << "           |" << endl;
+			cout << "\t\t\t\t|" << "           #For Flight Ticket Registration#" << "      |" << endl;
+			cout << "\t\t\t\t|" << "           #Exit#" << "                                |" << endl;
+			cout << "\t\t\t\t---------------------------------------------------";
+			cout << "\n";
+			cout << "\n";
+
 			if (deletion) // if there is any deletion, then update database file (create a new temp file that doesn't have deleted records, then remove the old database file and rename temp file to database file name)
 			{
-				cout << "\n Updating '" << CUSTOMER_FILE_NAME << "' File..." << endl;
+				cout << "\n\t\t\t\t\tUpdating '" << PASSENGER_FILE_NAME << "' File..." << endl;
 
-				fs = new fstream(CUSTOMER_FILE_NAME, ios::in | ios::binary);
+				fs = new fstream(PASSENGER_FILE_NAME, ios::in | ios::binary);
 				if (!fs)
 				{
-					cout << "\n Can't open '" << CUSTOMER_FILE_NAME << "' file, then Updating is incomplete." << endl;
+					cout << "\n\t\t\t\t\tCan't open '" << PASSENGER_FILE_NAME << "' file, then Updating is incomplete." << endl;
 					system("pause");
 
 					system("cls");
@@ -678,7 +774,7 @@ int main()
 				fs1 = new fstream("temp", ios::out | ios::binary);
 				if (!fs1)
 				{
-					cout << "\n Can't create temp file, then Updating is incomplete." << endl;
+					cout << "\n\t\t\t\tCan't create temp file, then Updating is incomplete." << endl;
 					system("pause");
 
 					closeFile(fs);
@@ -687,16 +783,16 @@ int main()
 				}
 
 				// write nondeleted records to the temp file
-				while (fs->read((char*)&Customer, sizeof(Customer)))
-					if (!Customer.deleted)
-						fs1->write((char*)&Customer, sizeof(Customer));
+				while (fs->read((char*)&Passenger, sizeof(Passenger)))
+					if (!Passenger.deleted)
+						fs1->write((char*)&Passenger, sizeof(Passenger));
 
 				closeFile(fs);
 				closeFile(fs1);
 
-				if (remove(CUSTOMER_FILE_NAME) == -1) // if there is an error
+				if (remove(PASSENGER_FILE_NAME) == -1) // if there is an error
 				{
-					cout << "\n Can't delete '" << CUSTOMER_FILE_NAME << "' file, then Updating is incomplete." << endl;
+					cout << "\n\t\t\t\t\tCan't delete '" << PASSENGER_FILE_NAME << "' file, then Updating is incomplete." << endl;
 					system("pause");
 
 					system("cls");
@@ -710,27 +806,29 @@ int main()
 				if (st.st_size == 0) // if all of records are deleted then the temp file size is zero                        
 					remove("temp"); // we have no records, then no database file is needed, just delete the temp file
 				else
-					if (rename("temp", CUSTOMER_FILE_NAME))
+					if (rename("temp", PASSENGER_FILE_NAME))
 					{
-						cout << "\n Can't rename temp file, then Updating is incomplete." << endl;
+						cout << "\n\t\t\t\tCan't rename temp file, then Updating is incomplete." << endl;
 						system("pause");
 
 						system("cls");
 						return 1;
 					}
 
-				cout << "\n Updating database file completed." << endl;
+				cout << "\n\t\t\t\t\tUpdating database file completed." << endl;
 				system("pause");
 			}
 
 			//Exit Splash Screen
+
+			system("color 17");
 			system("cls");
 			cout << "\n";
-			cout << "\t*This registration system*" << endl;
-			cout << "\t*is created by*" << endl;
-			cout << "\t*Chong Min Kee*" << endl;
-			cout << "\t*Hope To See Ypu Again*" << endl;
-			cout << "\t*Have A Nice Day.Goodbye!";
+			cout << "\t\t\t\t\t*This Registration System*" << endl;
+			cout << "\t\t\t\t\t*Is Created By*" << endl;
+			cout << "\t\t\t\t\t*Chong Min Kee*" << endl;
+			cout << "\t\t\t\t\t*Hope To See You Again*" << endl;
+			cout << "\t\t\t\t\t*Have A Nice Day.Goodbye!";
 			return 0;
 
 			break;
